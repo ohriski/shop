@@ -35,7 +35,7 @@
   Кошик <span class="badge text-bg-primary"><%= cart_quantity %></span>
 <% end %>
             <% if authenticated? %>
-              <span class="navbar-text me-2"><%= Current.user.email_address %></span>
+              <%= link_to Current.user.email_address, profile_path, class: "link-light text-decoration-none me-2" %>
               <%= button_to "Вийти", session_path, method: :delete, class: "btn btn-outline-light btn-sm" %>
             <% else %>
               <%= link_to "Увійти", new_session_path, class: "btn btn-outline-light btn-sm" %>

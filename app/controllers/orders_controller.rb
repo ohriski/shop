@@ -2,7 +2,11 @@ class OrdersController < ApplicationController
   before_action :load_cart, only: %i[new create]
 
   def new
-    @order = Current.user.orders.new(delivery_method: @delivery_methods.first)
+  @order = Current.user.orders.new(
+    delivery_method: @delivery_methods.first,
+    customer_name: Current.user.name,
+    phone: Current.user.phone
+  )
   end
 
   def create

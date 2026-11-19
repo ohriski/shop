@@ -91,4 +91,13 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
     get order_url(other)
     assert_response :not_found
   end
+  test "checkout form is prefilled from the profile" do
+  users(:one).update!(name: "Іван Петренко", phone: "+380501234567")
+  sign_in_as users(:one)
+  add_to_cart(products(:one))
+
+  get new_order_url
+  assert_select "input[name='order[customer_name]'][value=?]", "Іван Петренко"
+  assert_select "input[name='order[phone]'][value=?]", "+380501234567"
+end
 end

@@ -1,0 +1,45 @@
+<% content_for :title, "Профіль" %>
+
+<h1 class="h3 mb-4">Мій профіль</h1>
+
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="card card-body shadow-sm">
+      <h2 class="h5">Дані</h2>
+      <p class="mb-1"><strong>Email:</strong> <%= @user.email_address %></p>
+      <p class="mb-1"><strong>Імʼя:</strong> <%= @user.name.presence || "не вказано" %></p>
+      <p class="mb-1"><strong>Телефон:</strong> <%= @user.phone.presence || "не вказано" %></p>
+      <p class="mb-3 text-muted small">З нами з <%= @user.created_at.strftime("%d.%m.%Y") %></p>
+      <div><%= link_to "Редагувати профіль", edit_profile_path, class: "btn btn-outline-secondary btn-sm" %></div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <h2 class="h5">Мої замовлення</h2>
+
+    <% if @orders.empty? %>
+      <div class="alert alert-info">
+        У вас ще немає замовлень. <%= link_to "Перейти до каталогу", products_path %>
+      </div>
+    <% else %>
+      <div class="table-responsive">
+        <table class="table align-middle bg-white shadow-sm">
+          <thead>
+            <tr><th>Замовлення</th><th>Дата</th><th>Статус</th><th>Сума</th><th></th></tr>
+          </thead>
+          <tbody>
+            <% @orders.each do |order| %>
+              <tr>
+                <td>№<%= order.id %></td>
+                <td><%= order.created_at.strftime("%d.%m.%Y") %></td>
+                <td><%= order_status_badge(order) %></td>
+                <td><%= money(order.total_price) %></td>
+                <td><%= link_to "Деталі", order, class: "btn btn-outline-secondary btn-sm" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+</div>
