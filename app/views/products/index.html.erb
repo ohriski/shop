@@ -1,16 +1,31 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Каталог" %>
 
-<% content_for :title, "Products" %>
-
-<h1>Products</h1>
-
-<div id="products">
-  <% @products.each do |product| %>
-    <%= render product %>
-    <p>
-      <%= link_to "Show this product", product %>
-    </p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">Каталог товарів</h1>
+  <% if authenticated? %>
+    <%= link_to "Додати товар", new_product_path, class: "btn btn-success" %>
   <% end %>
 </div>
 
-<%= link_to "New product", new_product_path %>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <% @products.each do |product| %>
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+          <h2 class="h5 card-title"><%= product.name %></h2>
+          <p class="card-text text-muted"><%= truncate(product.description, length: 100) %></p>
+          <div class="mt-auto">
+            <p class="fw-bold fs-5 mb-1"><%= number_to_currency(product.price, unit: "₴", format: "%n %u") %></p>
+            <p class="small <%= product.stock.positive? ? 'text-success' : 'text-danger' %>">
+              <%= product.stock.positive? ? "В наявності: #{product.stock}" : "Немає в наявності" %>
+            </p>
+            <%= link_to "Детальніше", product, class: "btn btn-primary btn-sm" %>
+            <% if authenticated? %>
+              <%= link_to "Редагувати", edit_product_path(product), class: "btn btn-outline-secondary btn-sm" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

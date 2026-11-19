@@ -1,25 +1,41 @@
-<h1>Реєстрація</h1>
+<% content_for :title, "Реєстрація" %>
 
-<% if @user.errors.any? %>
-  <ul>
-    <% @user.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-  </ul>
-<% end %>
+<div class="row justify-content-center">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="h4 mb-3">Реєстрація</h1>
 
-<%= form_with model: @user, url: registration_path do |form| %>
-  <p>
-    <%= form.label :email_address, "Email" %><br>
-    <%= form.email_field :email_address, required: true %>
-  </p>
-  <p>
-    <%= form.label :password, "Пароль" %><br>
-    <%= form.password_field :password, required: true, minlength: 8 %>
-  </p>
-  <p>
-    <%= form.label :password_confirmation, "Повторіть пароль" %><br>
-    <%= form.password_field :password_confirmation, required: true %>
-  </p>
-  <%= form.submit "Зареєструватися" %>
-<% end %>
+        <% if @user.errors.any? %>
+          <div class="alert alert-danger">
+            <ul class="mb-0">
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= form_with model: @user, url: registration_path do |form| %>
+          <div class="mb-3">
+            <%= form.label :email_address, "Email", class: "form-label" %>
+            <%= form.email_field :email_address, required: true, class: "form-control" %>
+          </div>
+          <div class="mb-3">
+            <%= form.label :password, "Пароль (мінімум 8 символів)", class: "form-label" %>
+            <%= form.password_field :password, required: true, minlength: 8, class: "form-control" %>
+          </div>
+          <div class="mb-3">
+            <%= form.label :password_confirmation, "Повторіть пароль", class: "form-label" %>
+            <%= form.password_field :password_confirmation, required: true, class: "form-control" %>
+          </div>
+          <%= form.submit "Зареєструватися", class: "btn btn-primary w-100" %>
+        <% end %>
+
+        <div class="mt-3 small">
+          Вже є акаунт? <%= link_to "Увійти", new_session_path %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
