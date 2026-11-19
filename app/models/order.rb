@@ -1,10 +1,14 @@
 class Order < ApplicationRecord
+  UNPAID_TTL = 24.hours
+
   belongs_to :user
   belongs_to :delivery_method
   has_many :order_items, dependent: :destroy
 
   enum :status, { pending: 0, paid: 1, shipped: 2, cancelled: 3 }, default: :pending
   enum :payment_method, { card: 0, cash_on_delivery: 1 }, default: :card, prefix: :payment
+
+  scope :stale_unpaid, -> { pending.payment_card.where(created_at: ...UNPAID_TTL.ago) }
 
   STATUS_LABELS = {
     "pending" => "Очікує оплати",
@@ -68,6 +72,20 @@ class Order < ApplicationRecord
         attrs[:paid_at] = paid_at || Time.current if new_status == "paid"
         update!(attrs)
         true
+      end
+    end
+  end
+
+  # Автоскасування: умови перевіряються повторно під блокуванням,
+  # тож оплачене в останню мить замовлення не буде скасоване.
+  def cancel_if_unpaid!
+    with_lock do
+      if payable? && created_at < UNPAID_TTL.ago
+        restock!
+        update!(status: :cancelled)
+        true
+      else
+        false
       end
     end
   end

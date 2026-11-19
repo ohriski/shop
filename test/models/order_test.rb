@@ -187,4 +187,23 @@ test "rejects unknown status and returning to pending" do
   assert_not order.change_status!("pending")
   assert order.shipped?
 end
+test "cancel_if_unpaid! never cancels a paid order" do
+  @cart.add_product(products(:one), 1)
+  order = build_order
+  order.place_from(@cart)
+  order.pay!
+  order.update_columns(created_at: 25.hours.ago)
+
+  assert_not order.cancel_if_unpaid!
+  assert order.reload.paid?
+end
+
+test "cancel_if_unpaid! keeps a fresh order" do
+  @cart.add_product(products(:one), 1)
+  order = build_order
+  order.place_from(@cart)
+
+  assert_not order.cancel_if_unpaid!
+  assert order.reload.pending?
+end
 end
