@@ -1,0 +1,60 @@
+<% reviews = product.reviews.includes(:user).order(created_at: :desc) %>
+
+<section class="mt-5" id="reviews">
+  <h2 class="h4 mb-3">
+    Відгуки
+    <% if reviews.any? %>
+      <small class="text-muted">
+        · <span class="text-warning"><%= stars(product.average_rating) %></span>
+        <%= product.average_rating %> (<%= reviews.size %>)
+      </small>
+    <% end %>
+  </h2>
+
+  <% if authenticated? %>
+    <% if reviews.any? { |review| review.user_id == Current.user.id } %>
+      <div class="alert alert-info">Ви вже залишили відгук про цей товар.</div>
+    <% else %>
+      <%= form_with model: [ product, Review.new ], class: "card card-body shadow-sm mb-4" do |form| %>
+        <div class="mb-3">
+          <%= form.label :rating, "Оцінка", class: "form-label" %>
+          <%= form.select :rating, (1..5).to_a.reverse.map { |n| [ "#{stars(n)} (#{n})", n ] }, {}, class: "form-select w-auto" %>
+        </div>
+        <div class="mb-3">
+          <%= form.label :body, "Ваш відгук", class: "form-label" %>
+          <%= form.text_area :body, rows: 3, class: "form-control" %>
+        </div>
+        <div><%= form.submit "Надіслати відгук", class: "btn btn-primary" %></div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <div class="alert alert-secondary">
+      <%= link_to "Увійдіть", new_session_path %>, щоб залишити відгук.
+    </div>
+  <% end %>
+
+  <% if reviews.empty? %>
+    <p class="text-muted">Відгуків поки немає. Будьте першим!</p>
+  <% else %>
+    <% reviews.each do |review| %>
+      <div class="card card-body shadow-sm mb-3">
+        <div class="d-flex justify-content-between">
+          <div>
+            <span class="text-warning"><%= stars(review.rating) %></span>
+            <strong class="ms-2"><%= review.author_name %></strong>
+          </div>
+          <small class="text-muted"><%= review.created_at.strftime("%d.%m.%Y") %></small>
+        </div>
+
+        <%= simple_format(review.body, class: "mb-0 mt-2") %>
+
+        <% if authenticated? && (review.user_id == Current.user.id || admin?) %>
+          <div>
+            <%= button_to "Видалити", product_review_path(product, review), method: :delete,
+                  class: "btn btn-outline-danger btn-sm mt-2" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</section>

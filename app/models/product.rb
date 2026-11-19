@@ -3,6 +3,11 @@ class Product < ApplicationRecord
   has_one_attached :image
   has_many :cart_items, dependent: :destroy
   has_many :order_items, dependent: :restrict_with_error
+  has_many :reviews, dependent: :destroy
+
+def average_rating
+  reviews.average(:rating)&.round(1) || 0
+end
 
   validates :name, presence: true, uniqueness: true
   validates :price, numericality: { greater_than: 0 }

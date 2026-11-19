@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
-  resources :products
+  resources :products do
+  resources :reviews, only: %i[create destroy]
+end
   resource :cart, only: :show
 resources :cart_items, only: %i[create update destroy]
   root "products#index"
