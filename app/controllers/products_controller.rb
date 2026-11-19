@@ -1,9 +1,12 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update destroy ]
+  allow_unauthenticated_access only: %i[index show]
 
   # GET /products or /products.json
   def index
-    @products = Product.all
+  @categories = Category.order(:name)
+  @products = Product.includes(:category).with_attached_image.order(:name)
+  @products = @products.where(category_id: params[:category_id]) if params[:category_id].present?
   end
 
   # GET /products/1 or /products/1.json
@@ -65,6 +68,6 @@ class ProductsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def product_params
-      params.expect(product: [ :name, :description, :price, :stock ])
+      params.expect(product: [ :name, :description, :price, :stock, :category_id, :image ])
     end
 end

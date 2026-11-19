@@ -3,9 +3,11 @@ one:
   description: Test description A
   price: 10.50
   stock: 3
+  category: mice
 
 two:
   name: Product B
   description: Test description B
   price: 20.00
   stock: 7
+  category: keyboards

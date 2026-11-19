@@ -1,10 +1,36 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, @product.name %>
 
-<%= render @product %>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Каталог", products_path %></li>
+    <li class="breadcrumb-item"><%= link_to @product.category.name, products_path(category_id: @product.category_id) %></li>
+    <li class="breadcrumb-item active"><%= @product.name %></li>
+  </ol>
+</nav>
 
-<div>
-  <%= link_to "Edit this product", edit_product_path(@product) %> |
-  <%= link_to "Back to products", products_path %>
+<div class="row g-4">
+  <div class="col-md-5">
+    <% if @product.image.attached? %>
+      <%= image_tag @product.image, class: "img-fluid rounded shadow-sm bg-white w-100", alt: @product.name %>
+    <% else %>
+      <div class="product-img rounded d-flex align-items-center justify-content-center text-muted">Немає фото</div>
+    <% end %>
+  </div>
 
-  <%= button_to "Destroy this product", @product, method: :delete %>
+  <div class="col-md-7">
+    <h1 class="h2"><%= @product.name %></h1>
+    <p class="fs-3 fw-bold"><%= number_to_currency(@product.price, unit: "₴", format: "%n %u") %></p>
+    <p class="<%= @product.stock.positive? ? 'text-success' : 'text-danger' %>">
+      <%= @product.stock.positive? ? "В наявності: #{@product.stock} шт." : "Немає в наявності" %>
+    </p>
+    <p><%= simple_format(@product.description) %></p>
+
+    <% if authenticated? %>
+      <div class="mt-4 d-flex gap-2">
+        <%= link_to "Редагувати", edit_product_path(@product), class: "btn btn-outline-secondary" %>
+        <%= button_to "Видалити", @product, method: :delete, class: "btn btn-outline-danger",
+              form: { data: { turbo_confirm: "Видалити цей товар?" } } %>
+      </div>
+    <% end %>
+  </div>
 </div>
