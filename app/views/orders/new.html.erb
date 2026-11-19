@@ -1,0 +1,48 @@
+<% content_for :title, "Оформлення замовлення" %>
+
+<h1 class="h3 mb-4">Оформлення замовлення</h1>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <%= form_with model: @order, class: "card card-body shadow-sm" do |form| %>
+      <% if @order.errors.any? %>
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            <% @order.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= form.label :customer_name, "Імʼя та прізвище", class: "form-label" %>
+        <%= form.text_field :customer_name, class: "form-control" %>
+      </div>
+      <div class="mb-3">
+        <%= form.label :phone, "Телефон", class: "form-label" %>
+        <%= form.telephone_field :phone, class: "form-control" %>
+      </div>
+
+      <%= form.submit "Підтвердити замовлення", class: "btn btn-success" %>
+    <% end %>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card card-body shadow-sm">
+      <h2 class="h5">Ваше замовлення</h2>
+      <ul class="list-unstyled mb-3">
+        <% @items.each do |item| %>
+          <li class="d-flex justify-content-between">
+            <span><%= item.product.name %> × <%= item.quantity %></span>
+            <span><%= money(item.subtotal) %></span>
+          </li>
+        <% end %>
+      </ul>
+      <div class="d-flex justify-content-between fw-bold border-top pt-2">
+        <span>Разом:</span>
+        <span><%= money(@cart.total_price) %></span>
+      </div>
+    </div>
+  </div>
+</div>
