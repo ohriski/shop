@@ -24,6 +24,42 @@
         <%= form.telephone_field :phone, class: "form-control" %>
       </div>
 
+      <h2 class="h6 mt-2">Спосіб доставки</h2>
+      <div class="mb-3">
+        <% @delivery_methods.each do |dm| %>
+          <div class="form-check">
+            <%= form.radio_button :delivery_method_id, dm.id,
+                  class: "form-check-input",
+                  data: { requires_address: dm.requires_address? },
+                  onchange: "document.getElementById('address-fields').hidden = this.dataset.requiresAddress !== 'true'" %>
+            <%= form.label :delivery_method_id, value: dm.id, class: "form-check-label" do %>
+              <%= dm.name %> — <%= dm.price.zero? ? "безкоштовно" : money(dm.price) %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <%= tag.div id: "address-fields", hidden: !@order.delivery_method&.requires_address? do %>
+        <div class="mb-3">
+          <%= form.label :city, "Місто", class: "form-label" %>
+          <%= form.text_field :city, class: "form-control" %>
+        </div>
+        <div class="mb-3">
+          <%= form.label :address, "Адреса або номер відділення", class: "form-label" %>
+          <%= form.text_field :address, class: "form-control" %>
+        </div>
+      <% end %>
+
+      <h2 class="h6 mt-2">Спосіб оплати</h2>
+      <div class="mb-3">
+        <% Order::PAYMENT_METHOD_LABELS.each do |value, label| %>
+          <div class="form-check">
+            <%= form.radio_button :payment_method, value, class: "form-check-input" %>
+            <%= form.label :payment_method, label, value: value, class: "form-check-label" %>
+          </div>
+        <% end %>
+      </div>
+
       <%= form.submit "Підтвердити замовлення", class: "btn btn-success" %>
     <% end %>
   </div>
@@ -40,7 +76,7 @@
         <% end %>
       </ul>
       <div class="d-flex justify-content-between fw-bold border-top pt-2">
-        <span>Разом:</span>
+        <span>Товари:</span>
         <span><%= money(@cart.total_price) %></span>
       </div>
     </div>

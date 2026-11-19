@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_19_152338) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_19_200332) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -62,6 +62,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_19_152338) do
     t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
+  create_table "delivery_methods", force: :cascade do |t|
+    t.string "name", null: false
+    t.decimal "price", precision: 10, scale: 2, default: "0.0", null: false
+    t.boolean "requires_address", default: true, null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_delivery_methods_on_name", unique: true
+  end
+
   create_table "order_items", force: :cascade do |t|
     t.integer "order_id", null: false
     t.integer "product_id", null: false
@@ -81,6 +91,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_19_152338) do
     t.string "phone", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "delivery_method_id"
+    t.decimal "delivery_price", precision: 10, scale: 2, default: "0.0", null: false
+    t.string "city"
+    t.string "address"
+    t.integer "payment_method", default: 0, null: false
+    t.datetime "paid_at"
+    t.string "payment_reference"
+    t.index ["delivery_method_id"], name: "index_orders_on_delivery_method_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -119,6 +137,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_19_152338) do
   add_foreign_key "cart_items", "products"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "delivery_methods"
   add_foreign_key "orders", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "sessions", "users"

@@ -1,0 +1,23 @@
+nova_poshta:
+  name: Нова пошта
+  price: 60
+  requires_address: true
+  active: true
+  created_at: <%= Time.current.to_fs(:db) %>
+  updated_at: <%= Time.current.to_fs(:db) %>
+
+courier:
+  name: Кур'єр
+  price: 100
+  requires_address: true
+  active: true
+  created_at: <%= Time.current.to_fs(:db) %>
+  updated_at: <%= Time.current.to_fs(:db) %>
+
+pickup:
+  name: Самовивіз
+  price: 0
+  requires_address: false
+  active: true
+  created_at: <%= Time.current.to_fs(:db) %>
+  updated_at: <%= Time.current.to_fs(:db) %>

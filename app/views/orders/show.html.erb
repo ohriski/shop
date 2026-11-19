@@ -4,9 +4,24 @@
 
 <p class="mb-1"><strong>Статус:</strong> <%= @order.status_label %></p>
 <p class="mb-1"><strong>Одержувач:</strong> <%= @order.customer_name %></p>
-<p class="mb-4"><strong>Телефон:</strong> <%= @order.phone %></p>
+<p class="mb-1"><strong>Телефон:</strong> <%= @order.phone %></p>
+<p class="mb-1"><strong>Доставка:</strong> <%= @order.delivery_method.name %></p>
+<% if @order.delivery_method.requires_address? %>
+  <p class="mb-1"><strong>Адреса:</strong> <%= @order.city %>, <%= @order.address %></p>
+<% end %>
+<p class="mb-1"><strong>Оплата:</strong> <%= @order.payment_method_label %></p>
+<% if @order.paid_at %>
+  <p class="mb-1">
+    <strong>Оплачено:</strong> <%= @order.paid_at.strftime("%d.%m.%Y %H:%M") %>
+    (<%= @order.payment_reference %>)
+  </p>
+<% end %>
 
-<table class="table align-middle bg-white shadow-sm">
+<% if @order.payable? %>
+  <%= link_to "Оплатити замовлення", new_order_payment_path(@order), class: "btn btn-success mt-3" %>
+<% end %>
+
+<table class="table align-middle bg-white shadow-sm mt-4">
   <thead>
     <tr><th>Товар</th><th>Ціна</th><th>Кількість</th><th>Сума</th></tr>
   </thead>
@@ -21,6 +36,14 @@
     <% end %>
   </tbody>
   <tfoot>
+    <tr>
+      <td colspan="3" class="text-end">Товари:</td>
+      <td><%= money(@order.items_total) %></td>
+    </tr>
+    <tr>
+      <td colspan="3" class="text-end">Доставка:</td>
+      <td><%= money(@order.delivery_price) %></td>
+    </tr>
     <tr>
       <td colspan="3" class="text-end fw-bold">Разом:</td>
       <td class="fw-bold"><%= money(@order.total_price) %></td>
