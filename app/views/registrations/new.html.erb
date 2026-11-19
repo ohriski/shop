@@ -1,0 +1,25 @@
+<h1>Реєстрація</h1>
+
+<% if @user.errors.any? %>
+  <ul>
+    <% @user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= form_with model: @user, url: registration_path do |form| %>
+  <p>
+    <%= form.label :email_address, "Email" %><br>
+    <%= form.email_field :email_address, required: true %>
+  </p>
+  <p>
+    <%= form.label :password, "Пароль" %><br>
+    <%= form.password_field :password, required: true, minlength: 8 %>
+  </p>
+  <p>
+    <%= form.label :password_confirmation, "Повторіть пароль" %><br>
+    <%= form.password_field :password_confirmation, required: true %>
+  </p>
+  <%= form.submit "Зареєструватися" %>
+<% end %>

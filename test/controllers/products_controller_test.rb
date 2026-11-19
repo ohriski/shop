@@ -2,8 +2,9 @@ require "test_helper"
 
 class ProductsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @product = products(:one)
-  end
+  sign_in_as users(:one)
+  @product = products(:one)
+end
 
   test "should get index" do
     get products_url
