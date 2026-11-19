@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
   resources :products
+  resource :cart, only: :show
+resources :cart_items, only: %i[create update destroy]
   root "products#index"
   resource :registration, only: %i[new create]
 

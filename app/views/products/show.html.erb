@@ -24,7 +24,10 @@
       <%= @product.stock.positive? ? "В наявності: #{@product.stock} шт." : "Немає в наявності" %>
     </p>
     <p><%= simple_format(@product.description) %></p>
-
+<% if @product.stock.positive? %>
+  <%= button_to "Додати до кошика", cart_items_path, params: { product_id: @product.id },
+        class: "btn btn-success btn-lg" %>
+<% end %>
     <% if admin? %>
   <div class="mt-4 d-flex gap-2">
     <%= link_to "Редагувати", edit_product_path(@product), class: "btn btn-outline-secondary" %>

@@ -42,10 +42,16 @@
             <p class="small <%= product.stock.positive? ? 'text-success' : 'text-danger' %>">
               <%= product.stock.positive? ? "В наявності: #{product.stock}" : "Немає в наявності" %>
             </p>
-            <%= link_to "Детальніше", product, class: "btn btn-primary btn-sm" %>
-            <% if admin? %>
-  <%= link_to "Редагувати", edit_product_path(product), class: "btn btn-outline-secondary btn-sm" %>
-<% end %>
+            <div class="d-flex flex-wrap gap-1 align-items-center">
+  <%= link_to "Детальніше", product, class: "btn btn-primary btn-sm" %>
+  <% if product.stock.positive? %>
+    <%= button_to "У кошик", cart_items_path, params: { product_id: product.id },
+          class: "btn btn-success btn-sm", form_class: "d-inline" %>
+  <% end %>
+  <% if admin? %>
+    <%= link_to "Редагувати", edit_product_path(product), class: "btn btn-outline-secondary btn-sm" %>
+  <% end %>
+</div>
           </div>
         </div>
       </div>

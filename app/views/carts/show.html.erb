@@ -1,0 +1,61 @@
+<% content_for :title, "Кошик" %>
+
+<h1 class="h3 mb-4">Кошик</h1>
+
+<% if @items.empty? %>
+  <div class="alert alert-info">
+    Ваш кошик порожній. <%= link_to "Перейти до каталогу", products_path %>
+  </div>
+<% else %>
+  <div class="table-responsive">
+    <table class="table align-middle bg-white shadow-sm">
+      <thead>
+        <tr>
+          <th>Товар</th>
+          <th>Ціна</th>
+          <th style="width: 220px;">Кількість</th>
+          <th>Сума</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @items.each do |item| %>
+          <tr>
+            <td><%= link_to item.product.name, item.product %></td>
+            <td><%= money(item.product.price) %></td>
+            <td>
+              <%= form_with model: item, url: cart_item_path(item) do |form| %>
+  <div class="input-group input-group-sm" style="width: 130px;">
+    <button type="button" class="btn btn-outline-secondary"
+            onclick="this.parentElement.querySelector('input').stepDown(); this.form.requestSubmit()">−</button>
+    <%= form.number_field :quantity,
+          min: 1,
+          max: item.product.stock,
+          class: "form-control text-center",
+          onchange: "this.form.requestSubmit()" %>
+    <button type="button" class="btn btn-outline-secondary"
+            onclick="this.parentElement.querySelector('input').stepUp(); this.form.requestSubmit()">+</button>
+  </div>
+<% end %>
+            </td>
+            <td class="fw-bold"><%= money(item.subtotal) %></td>
+            <td>
+              <%= button_to "Видалити", cart_item_path(item), method: :delete, class: "btn btn-outline-danger btn-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" class="text-end fw-bold">Разом:</td>
+          <td colspan="2" class="fw-bold fs-5"><%= money(@cart.total_price) %></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-between">
+    <%= link_to "Продовжити покупки", products_path, class: "btn btn-outline-secondary" %>
+    <button class="btn btn-success" disabled>Оформити замовлення (скоро)</button>
+  </div>
+<% end %>
