@@ -1,0 +1,11 @@
+one:
+  name: Product A
+  description: Test description A
+  price: 10.50
+  stock: 3
+
+two:
+  name: Product B
+  description: Test description B
+  price: 20.00
+  stock: 7
