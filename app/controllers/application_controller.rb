@@ -1,8 +1,17 @@
 class ApplicationController < ActionController::Base
-  include Authentication
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
+  include Authentication
 
-  # Changes to the importmap will invalidate the etag for HTML responses
-  stale_when_importmap_changes
+  helper_method :admin?
+
+  private
+
+  def admin?
+  resume_session
+  Current.user&.admin? || false
+end
+
+  def require_admin
+    redirect_to root_path, alert: "Недостатньо прав для цієї дії" unless admin?
+  end
 end

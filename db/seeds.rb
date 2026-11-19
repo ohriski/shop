@@ -31,3 +31,10 @@ products.each do |attrs|
   product = Product.find_or_initialize_by(name: attrs[:name])
   product.update!(attrs.except(:category).merge(category: categories.fetch(attrs[:category])))
 end
+if Rails.env.development?
+  User.find_or_create_by!(email_address: "admin@example.com") do |u|
+    u.password = "admin12345"
+    u.password_confirmation = "admin12345"
+    u.admin = true
+  end
+end

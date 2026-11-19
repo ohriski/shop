@@ -25,12 +25,12 @@
     </p>
     <p><%= simple_format(@product.description) %></p>
 
-    <% if authenticated? %>
-      <div class="mt-4 d-flex gap-2">
-        <%= link_to "Редагувати", edit_product_path(@product), class: "btn btn-outline-secondary" %>
-        <%= button_to "Видалити", @product, method: :delete, class: "btn btn-outline-danger",
-              form: { data: { turbo_confirm: "Видалити цей товар?" } } %>
-      </div>
-    <% end %>
+    <% if admin? %>
+  <div class="mt-4 d-flex gap-2">
+    <%= link_to "Редагувати", edit_product_path(@product), class: "btn btn-outline-secondary" %>
+    <%= button_to "Видалити", @product, method: :delete, class: "btn btn-outline-danger",
+          form: { data: { turbo_confirm: "Видалити цей товар?" } } %>
+  </div>
+<% end %>
   </div>
 </div>

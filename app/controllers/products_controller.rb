@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[ show edit update destroy ]
   allow_unauthenticated_access only: %i[index show]
+  before_action :require_admin, except: %i[index show]
+  before_action :set_product, only: %i[show edit update destroy]
 
   # GET /products or /products.json
   def index
@@ -61,10 +62,9 @@ class ProductsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params.expect(:id))
-    end
+  def set_product
+    @product = Product.find(params.expect(:id))
+  end
 
     # Only allow a list of trusted parameters through.
     def product_params
