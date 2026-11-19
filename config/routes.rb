@@ -12,6 +12,7 @@ resources :cart_items, only: %i[create update destroy]
   resource :payment, only: %i[new create]
 end
 
+  resources :contact_messages, only: %i[new create], path: "contacts"
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

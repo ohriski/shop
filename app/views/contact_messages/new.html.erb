@@ -1,0 +1,47 @@
+<% content_for :title, "Контакти" %>
+
+<h1 class="h3 mb-4">Зворотний зв'язок</h1>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <%= form_with model: @contact_message, class: "card card-body shadow-sm" do |form| %>
+      <% if @contact_message.errors.any? %>
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            <% @contact_message.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= form.label :name, "Ваше імʼя", class: "form-label" %>
+        <%= form.text_field :name, class: "form-control" %>
+      </div>
+      <div class="mb-3">
+        <%= form.label :email, "Email", class: "form-label" %>
+        <%= form.email_field :email, class: "form-control" %>
+      </div>
+      <div class="mb-3">
+        <%= form.label :subject, "Тема", class: "form-label" %>
+        <%= form.text_field :subject, class: "form-control" %>
+      </div>
+      <div class="mb-3">
+        <%= form.label :body, "Повідомлення", class: "form-label" %>
+        <%= form.text_area :body, rows: 5, class: "form-control" %>
+      </div>
+
+      <div><%= form.submit "Надіслати", class: "btn btn-primary" %></div>
+    <% end %>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card card-body shadow-sm">
+      <h2 class="h5">Контактна інформація</h2>
+      <p class="mb-1">Email: shop@example.com</p>
+      <p class="mb-1">Телефон: +380 00 000 00 00</p>
+      <p class="mb-0">Адреса: м. Львів, вул. Прикладна, 1</p>
+    </div>
+  </div>
+</div>

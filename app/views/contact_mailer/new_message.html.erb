@@ -1,0 +1,4 @@
+<h2>Нове повідомлення із сайту</h2>
+<p><strong>Від:</strong> <%= @contact_message.name %> (<%= @contact_message.email %>)</p>
+<p><strong>Тема:</strong> <%= @contact_message.subject %></p>
+<%= simple_format(@contact_message.body) %>
