@@ -52,6 +52,26 @@ class Order < ApplicationRecord
     end
   end
 
+  # Зміна статусу адміністратором. Скасування повертає товари на склад,
+  # скасоване замовлення змінити не можна, повернення в "pending" заборонене.
+  def change_status!(new_status)
+    new_status = new_status.to_s
+    return false unless self.class.statuses.key?(new_status) && new_status != "pending"
+
+    with_lock do
+      if cancelled? || status == new_status
+        false
+      else
+        restock! if new_status == "cancelled"
+
+        attrs = { status: new_status }
+        attrs[:paid_at] = paid_at || Time.current if new_status == "paid"
+        update!(attrs)
+        true
+      end
+    end
+  end
+
   # Створює замовлення з кошика: перевіряє склад, списує залишки, очищає кошик.
   # Усе в одній транзакції: або виконується повністю, або нічого.
   def place_from(cart)
@@ -84,5 +104,11 @@ class Order < ApplicationRecord
 
   def delivery_method_available
     errors.add(:delivery_method, "наразі недоступний") if delivery_method && !delivery_method.active?
+  end
+
+  def restock!
+    order_items.includes(:product).each do |item|
+      item.product.increment!(:stock, item.quantity)
+    end
   end
 end

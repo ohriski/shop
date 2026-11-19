@@ -1,0 +1,26 @@
+<% content_for :title, "Адмін: повідомлення" %>
+
+<h1 class="h3 mb-3">Адміністрування</h1>
+<%= render "admin/shared/nav" %>
+
+<% if @contact_messages.empty? %>
+  <div class="alert alert-info">Повідомлень поки немає.</div>
+<% else %>
+  <div class="table-responsive">
+    <table class="table align-middle bg-white shadow-sm">
+      <thead>
+        <tr><th>Дата</th><th>Від</th><th>Тема</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% @contact_messages.each do |message| %>
+          <tr>
+            <td><%= message.created_at.strftime("%d.%m.%Y %H:%M") %></td>
+            <td><%= message.name %><br><small class="text-muted"><%= message.email %></small></td>
+            <td><%= message.subject %></td>
+            <td><%= link_to "Відкрити", admin_contact_message_path(message), class: "btn btn-outline-secondary btn-sm" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

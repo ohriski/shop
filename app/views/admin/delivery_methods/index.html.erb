@@ -1,0 +1,35 @@
+<% content_for :title, "Адмін: доставка" %>
+
+<h1 class="h3 mb-3">Адміністрування</h1>
+<%= render "admin/shared/nav" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h5 mb-0">Способи доставки</h2>
+  <%= link_to "Додати спосіб доставки", new_admin_delivery_method_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<div class="table-responsive">
+  <table class="table align-middle bg-white shadow-sm">
+    <thead>
+      <tr><th>Назва</th><th>Ціна</th><th>Адреса</th><th>Статус</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% @delivery_methods.each do |dm| %>
+        <tr>
+          <td><%= dm.name %></td>
+          <td><%= dm.price.zero? ? "безкоштовно" : money(dm.price) %></td>
+          <td><%= dm.requires_address? ? "потрібна" : "не потрібна" %></td>
+          <td><%= tag.span(dm.active? ? "Активний" : "Вимкнений", class: "badge text-bg-#{dm.active? ? 'success' : 'secondary'}") %></td>
+          <td>
+            <div class="d-flex gap-2">
+              <%= link_to "Редагувати", edit_admin_delivery_method_path(dm), class: "btn btn-outline-secondary btn-sm" %>
+              <%= button_to "Видалити", admin_delivery_method_path(dm), method: :delete,
+                    class: "btn btn-outline-danger btn-sm",
+                    form: { data: { turbo_confirm: "Видалити цей спосіб доставки?" } } %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

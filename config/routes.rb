@@ -11,7 +11,11 @@ resources :cart_items, only: %i[create update destroy]
   resources :orders, only: %i[new create show] do
   resource :payment, only: %i[new create]
 end
-
+namespace :admin do
+  resources :orders, only: %i[index show update]
+  resources :delivery_methods, except: :show
+  resources :contact_messages, only: %i[index show destroy]
+end
 resource :profile, only: %i[show edit update]
 
   resources :contact_messages, only: %i[new create], path: "contacts"

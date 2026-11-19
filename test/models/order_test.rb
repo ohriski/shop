@@ -143,4 +143,48 @@ class OrderTest < ActiveSupport::TestCase
     assert_not order.pay!
     assert order.pending?
   end
+  test "cancelling an order returns the goods to stock" do
+  @cart.add_product(products(:one), 2)
+  order = build_order
+  order.place_from(@cart)
+
+  assert_difference -> { products(:one).reload.stock }, 2 do
+    assert order.change_status!("cancelled")
+  end
+  assert order.cancelled?
+end
+
+test "cancelled order cannot be changed or restocked again" do
+  @cart.add_product(products(:one), 2)
+  order = build_order
+  order.place_from(@cart)
+  order.change_status!("cancelled")
+
+  assert_no_difference -> { products(:one).reload.stock } do
+    assert_not order.change_status!("cancelled")
+    assert_not order.change_status!("paid")
+  end
+  assert order.cancelled?
+end
+
+test "marking as paid sets paid_at" do
+  @cart.add_product(products(:one), 1)
+  order = build_order(payment_method: :cash_on_delivery)
+  order.place_from(@cart)
+
+  assert order.change_status!("paid")
+  assert order.paid?
+  assert_not_nil order.paid_at
+end
+
+test "rejects unknown status and returning to pending" do
+  @cart.add_product(products(:one), 1)
+  order = build_order
+  order.place_from(@cart)
+
+  assert_not order.change_status!("bogus")
+  order.change_status!("shipped")
+  assert_not order.change_status!("pending")
+  assert order.shipped?
+end
 end

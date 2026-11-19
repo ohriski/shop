@@ -1,0 +1,41 @@
+<ul class="nav nav-pills mb-4">
+  <li class="nav-item"><%= link_to "Замовлення", admin_orders_path, class: "nav-link #{'active' if controller_name == 'orders'}" %></li>
+  <li class="nav-item"><%= link_to "Доставка", admin_delivery_methods_path, class: "nav-link #{'active' if controller_name == 'delivery_methods'}" %></li>
+  <li class="nav-item"><%= link_to "Повідомлення", admin_contact_messages_path, class: "nav-link #{'active' if controller_name == 'contact_messages'}" %></li>
+  <li class="nav-item"><%= link_to "Товари", products_path, class: "nav-link" %></li>
+</ul><% content_for :title, "Адмін: замовлення" %>
+
+<h1 class="h3 mb-3">Адміністрування</h1>
+<%= render "admin/shared/nav" %>
+
+<div class="mb-3 d-flex flex-wrap gap-2">
+  <%= link_to "Усі", admin_orders_path, class: "btn btn-sm #{@status.nil? ? 'btn-dark' : 'btn-outline-dark'}" %>
+  <% Order::STATUS_LABELS.each do |key, label| %>
+    <%= link_to label, admin_orders_path(status: key), class: "btn btn-sm #{@status == key ? 'btn-dark' : 'btn-outline-dark'}" %>
+  <% end %>
+</div>
+
+<% if @orders.empty? %>
+  <div class="alert alert-info">Замовлень немає.</div>
+<% else %>
+  <div class="table-responsive">
+    <table class="table align-middle bg-white shadow-sm">
+      <thead>
+        <tr><th>Замовлення</th><th>Дата</th><th>Клієнт</th><th>Доставка</th><th>Статус</th><th>Сума</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr>
+            <td>№<%= order.id %></td>
+            <td><%= order.created_at.strftime("%d.%m.%Y %H:%M") %></td>
+            <td><%= order.customer_name %><br><small class="text-muted"><%= order.phone %></small></td>
+            <td><%= order.delivery_method&.name %></td>
+            <td><%= order_status_badge(order) %></td>
+            <td><%= money(order.total_price) %></td>
+            <td><%= link_to "Деталі", admin_order_path(order), class: "btn btn-outline-secondary btn-sm" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

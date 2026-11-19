@@ -1,0 +1,65 @@
+<% content_for :title, "Адмін: замовлення №#{@order.id}" %>
+
+<h1 class="h3 mb-3">Адміністрування</h1>
+<%= render "admin/shared/nav" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h5 mb-0">Замовлення №<%= @order.id %> <%= order_status_badge(@order) %></h2>
+  <%= link_to "← До списку", admin_orders_path, class: "btn btn-outline-secondary btn-sm" %>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="card card-body shadow-sm mb-3">
+      <p class="mb-1"><strong>Дата:</strong> <%= @order.created_at.strftime("%d.%m.%Y %H:%M") %></p>
+      <p class="mb-1"><strong>Акаунт:</strong> <%= @order.user.email_address %></p>
+      <p class="mb-1"><strong>Одержувач:</strong> <%= @order.customer_name %></p>
+      <p class="mb-1"><strong>Телефон:</strong> <%= @order.phone %></p>
+      <p class="mb-1"><strong>Доставка:</strong> <%= @order.delivery_method&.name || "Не вказано" %></p>
+      <% if @order.delivery_method&.requires_address? %>
+        <p class="mb-1"><strong>Адреса:</strong> <%= @order.city %>, <%= @order.address %></p>
+      <% end %>
+      <p class="mb-1"><strong>Оплата:</strong> <%= @order.payment_method_label %></p>
+      <% if @order.paid_at %>
+        <p class="mb-0"><strong>Оплачено:</strong> <%= @order.paid_at.strftime("%d.%m.%Y %H:%M") %></p>
+      <% end %>
+    </div>
+
+    <div class="card card-body shadow-sm">
+      <h3 class="h6">Статус замовлення</h3>
+      <% if @order.cancelled? %>
+        <p class="text-muted mb-0">Скасоване замовлення змінити не можна.</p>
+      <% else %>
+        <% options = @order.pending? ? Order::STATUS_LABELS : Order::STATUS_LABELS.except("pending") %>
+        <%= form_with model: @order, url: admin_order_path(@order), method: :patch, class: "d-flex gap-2" do |form| %>
+          <%= form.select :status, options.invert, {}, class: "form-select" %>
+          <%= form.submit "Змінити", class: "btn btn-primary" %>
+        <% end %>
+        <p class="text-muted small mt-2 mb-0">Скасування повертає товари на склад.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <table class="table align-middle bg-white shadow-sm">
+      <thead>
+        <tr><th>Товар</th><th>Ціна</th><th>Кількість</th><th>Сума</th></tr>
+      </thead>
+      <tbody>
+        <% @order.order_items.includes(:product).each do |item| %>
+          <tr>
+            <td><%= item.product.name %></td>
+            <td><%= money(item.unit_price) %></td>
+            <td><%= item.quantity %></td>
+            <td><%= money(item.subtotal) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="3" class="text-end">Товари:</td><td><%= money(@order.items_total) %></td></tr>
+        <tr><td colspan="3" class="text-end">Доставка:</td><td><%= money(@order.delivery_price) %></td></tr>
+        <tr><td colspan="3" class="text-end fw-bold">Разом:</td><td class="fw-bold"><%= money(@order.total_price) %></td></tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<%= form_with model: [ :admin, delivery_method ], class: "card card-body shadow-sm" do |form| %>
+  <% if delivery_method.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        <% delivery_method.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, "Назва", class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :price, "Ціна, ₴", class: "form-label" %>
+    <%= form.number_field :price, step: 0.01, min: 0, class: "form-control" %>
+  </div>
+  <div class="form-check mb-2">
+    <%= form.check_box :requires_address, class: "form-check-input" %>
+    <%= form.label :requires_address, "Потрібна адреса (місто й відділення)", class: "form-check-label" %>
+  </div>
+  <div class="form-check mb-3">
+    <%= form.check_box :active, class: "form-check-input" %>
+    <%= form.label :active, "Активний (показується при оформленні)", class: "form-check-label" %>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= form.submit "Зберегти", class: "btn btn-primary" %>
+    <%= link_to "Скасувати", admin_delivery_methods_path, class: "btn btn-outline-secondary" %>
+  </div>
+<% end %>

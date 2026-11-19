@@ -1,0 +1,21 @@
+<% content_for :title, "Адмін: повідомлення" %>
+
+<h1 class="h3 mb-3">Адміністрування</h1>
+<%= render "admin/shared/nav" %>
+
+<div class="card card-body shadow-sm">
+  <h2 class="h5"><%= @contact_message.subject %></h2>
+  <p class="text-muted">
+    Від <%= @contact_message.name %> (<%= @contact_message.email %>),
+    <%= @contact_message.created_at.strftime("%d.%m.%Y %H:%M") %>
+  </p>
+  <%= simple_format(@contact_message.body) %>
+
+  <div class="d-flex gap-2 mt-3">
+    <%= mail_to @contact_message.email, "Відповісти", subject: "Re: #{@contact_message.subject}", class: "btn btn-primary" %>
+    <%= button_to "Видалити", admin_contact_message_path(@contact_message), method: :delete,
+          class: "btn btn-outline-danger",
+          form: { data: { turbo_confirm: "Видалити це повідомлення?" } } %>
+    <%= link_to "← До списку", admin_contact_messages_path, class: "btn btn-outline-secondary" %>
+  </div>
+</div>

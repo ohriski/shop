@@ -1,0 +1,9 @@
+<% content_for :title, "Адмін: новий спосіб доставки" %>
+
+<h1 class="h3 mb-3">Адміністрування</h1>
+<%= render "admin/shared/nav" %>
+
+<div class="row"><div class="col-lg-6">
+  <h2 class="h5 mb-3">Новий спосіб доставки</h2>
+  <%= render "form", delivery_method: @delivery_method %>
+</div></div>
