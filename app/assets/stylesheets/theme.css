@@ -1,0 +1,200 @@
+/* Тема магазину. Перекриває Bootstrap змінними та кількома правилами,
+   розмітку видів міняти не потрібно. */
+
+:root {
+  --shop-ink: #14212b;
+  --shop-line: #d5dee4;
+  --shop-lagoon: #0b6e75;
+  --shop-lagoon-dark: #085259;
+  --shop-amber: #f2a900;
+  --shop-amber-dark: #d99700;
+
+  --bs-body-font-family:
+    "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --bs-body-color: #14212b;
+  --bs-body-color-rgb: 20, 33, 43;
+  --bs-body-bg: #f1f5f7;
+  --bs-body-bg-rgb: 241, 245, 247;
+  --bs-light-rgb: 241, 245, 247;
+  --bs-dark-rgb: 20, 33, 43;
+  --bs-primary: #0b6e75;
+  --bs-primary-rgb: 11, 110, 117;
+  --bs-link-color: #0b6e75;
+  --bs-link-color-rgb: 11, 110, 117;
+  --bs-link-hover-color: #085259;
+  --bs-link-hover-color-rgb: 8, 82, 89;
+  --bs-border-color: #d5dee4;
+}
+
+/* Заголовки */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+.navbar-brand {
+  font-family: "Unbounded", "Onest", system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.h2 {
+  font-size: 1.6rem;
+}
+.h3 {
+  font-size: 1.4rem;
+}
+.h4 {
+  font-size: 1.2rem;
+}
+.h5 {
+  font-size: 1.05rem;
+}
+.h6 {
+  font-size: 0.95rem;
+}
+.navbar-brand {
+  font-size: 1.15rem;
+}
+
+/* Панелі: рамка замість тіні */
+.card {
+  --bs-card-border-color: var(--shop-line);
+  --bs-card-border-radius: 0.75rem;
+  --bs-card-inner-border-radius: calc(0.75rem - 1px);
+}
+.shadow-sm {
+  box-shadow: none !important;
+}
+.alert {
+  border-radius: 0.5rem;
+}
+
+/* Таблиці */
+.table.bg-white {
+  border: 1px solid var(--shop-line);
+}
+.table > thead {
+  --bs-table-bg: #f7f9fa;
+}
+.table > thead th {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #5b6b78;
+  white-space: nowrap;
+}
+.table td,
+.table th {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Кнопки */
+.btn {
+  --bs-btn-border-radius: 0.5rem;
+  --bs-btn-font-weight: 500;
+}
+.btn-primary {
+  --bs-btn-bg: var(--shop-lagoon);
+  --bs-btn-border-color: var(--shop-lagoon);
+  --bs-btn-hover-bg: var(--shop-lagoon-dark);
+  --bs-btn-hover-border-color: var(--shop-lagoon-dark);
+  --bs-btn-active-bg: var(--shop-lagoon-dark);
+  --bs-btn-active-border-color: var(--shop-lagoon-dark);
+  --bs-btn-disabled-bg: var(--shop-lagoon);
+  --bs-btn-disabled-border-color: var(--shop-lagoon);
+  --bs-btn-focus-shadow-rgb: 11, 110, 117;
+}
+/* Дії покупки: єдиний яскравий акцент сайту */
+.btn-success {
+  --bs-btn-color: var(--shop-ink);
+  --bs-btn-bg: var(--shop-amber);
+  --bs-btn-border-color: var(--shop-amber);
+  --bs-btn-hover-color: var(--shop-ink);
+  --bs-btn-hover-bg: var(--shop-amber-dark);
+  --bs-btn-hover-border-color: var(--shop-amber-dark);
+  --bs-btn-active-color: var(--shop-ink);
+  --bs-btn-active-bg: var(--shop-amber-dark);
+  --bs-btn-active-border-color: var(--shop-amber-dark);
+  --bs-btn-disabled-color: var(--shop-ink);
+  --bs-btn-disabled-bg: var(--shop-amber);
+  --bs-btn-disabled-border-color: var(--shop-amber);
+  --bs-btn-focus-shadow-rgb: 242, 169, 0;
+}
+
+/* Лічильник кошика в навігації */
+.navbar .badge.text-bg-primary {
+  background-color: var(--shop-amber) !important;
+  color: var(--shop-ink) !important;
+}
+
+/* Форми */
+.form-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+.form-control,
+.form-select {
+  border-color: var(--shop-line);
+  border-radius: 0.5rem;
+}
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: var(--shop-lagoon);
+  box-shadow: 0 0 0 0.2rem rgba(11, 110, 117, 0.2);
+}
+.form-check-input:checked {
+  background-color: var(--shop-lagoon);
+  border-color: var(--shop-lagoon);
+}
+
+/* Вкладки адмін-розділу */
+.nav-pills {
+  --bs-nav-pills-link-active-bg: var(--shop-lagoon);
+}
+/* Каталог */
+.product-img {
+  width: 100%;
+  height: 220px;
+}
+img.product-img {
+  object-fit: contain;
+  background-color: #fff;
+  padding: 0.75rem;
+}
+div.product-img {
+  background-color: #e8eef1;
+  border-radius: var(--bs-card-inner-border-radius, 0.75rem)
+    var(--bs-card-inner-border-radius, 0.75rem) 0 0;
+}
+
+.shop-price {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.shop-hero {
+  background-color: #fff;
+  border: 1px solid var(--shop-line);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+.shop-hero-img {
+  display: block;
+  width: 100%;
+  height: 320px;
+  object-fit: contain;
+  padding: 1.5rem;
+}
+@media (max-width: 767.98px) {
+  .shop-hero-img {
+    height: 220px;
+  }
+}
