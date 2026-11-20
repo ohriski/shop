@@ -1,0 +1,39 @@
+---
+- category: Ігрові миші
+  name: ProStrike X1
+  description: Провідна ігрова миша з оптичним сенсором 16000 DPI та 6 програмованими
+    кнопками.
+  price: '1299.0'
+  stock: 15
+- category: Ігрові миші
+  name: AeroClick Wireless
+  description: Бездротова легка миша вагою 62 г, до 70 годин роботи від одного заряду.
+  price: '1899.0'
+  stock: 5
+  image: 4.jfif
+- category: Клавіатури
+  name: MechaBlade K87
+  description: Механічна клавіатура TKL з перемикачами, що замінюються, та RGB-підсвіткою.
+  price: '2499.0'
+  stock: 12
+- category: Навушники та гарнітури
+  name: SoundRift 7.1
+  description: Ігрова гарнітура з віртуальним об'ємним звуком 7.1 та знімним мікрофоном.
+  price: '2199.0'
+  stock: 10
+- category: Геймпади
+  name: PadMaster Pro
+  description: Бездротовий геймпад із вібровіддачею, сумісний із ПК та консолями.
+  price: '1499.0'
+  stock: 20
+- category: Ігрові крісла
+  name: ThroneGT Racing
+  description: Ергономічне ігрове крісло з регульованою поперековою підтримкою та
+    підлокітниками 4D.
+  price: '7999.0'
+  stock: 4
+- category: Килимки для миші
+  name: GlideMat XL
+  description: Великий килимок 900x400 мм з прошитими краями та гумовою основою.
+  price: '499.0'
+  stock: 39

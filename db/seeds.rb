@@ -1,40 +1,42 @@
-# Прибираємо тестові товари з першого кроку
-Product.where(name: [ "Product 1", "Product 2" ]).destroy_all
-
-categories = [
-  "Ігрові миші",
-  "Клавіатури",
-  "Навушники та гарнітури",
-  "Геймпади",
-  "Ігрові крісла",
-  "Килимки для миші"
-].index_with { |name| Category.find_or_create_by!(name: name) }
-
-products = [
-  { name: "ProStrike X1", category: "Ігрові миші", price: 1299, stock: 15,
-    description: "Провідна ігрова миша з оптичним сенсором 16000 DPI та 6 програмованими кнопками." },
-  { name: "AeroClick Wireless", category: "Ігрові миші", price: 1899, stock: 8,
-    description: "Бездротова легка миша вагою 62 г, до 70 годин роботи від одного заряду." },
-  { name: "MechaBlade K87", category: "Клавіатури", price: 2499, stock: 12,
-    description: "Механічна клавіатура TKL з перемикачами, що замінюються, та RGB-підсвіткою." },
-  { name: "SoundRift 7.1", category: "Навушники та гарнітури", price: 2199, stock: 10,
-    description: "Ігрова гарнітура з віртуальним об'ємним звуком 7.1 та знімним мікрофоном." },
-  { name: "PadMaster Pro", category: "Геймпади", price: 1499, stock: 20,
-    description: "Бездротовий геймпад із вібровіддачею, сумісний із ПК та консолями." },
-  { name: "ThroneGT Racing", category: "Ігрові крісла", price: 7999, stock: 4,
-    description: "Ергономічне ігрове крісло з регульованою поперековою підтримкою та підлокітниками 4D." },
-  { name: "GlideMat XL", category: "Килимки для миші", price: 499, stock: 40,
-    description: "Великий килимок 900x400 мм з прошитими краями та гумовою основою." }
-]
-
-products.each do |attrs|
-  product = Product.find_or_initialize_by(name: attrs[:name])
-  product.update!(attrs.except(:category).merge(category: categories.fetch(attrs[:category])))
+# Способи доставки
+[
+  { name: "Нова пошта (відділення)", price: 60, requires_address: true },
+  { name: "Кур'єр", price: 100, requires_address: true },
+  { name: "Самовивіз", price: 0, requires_address: false }
+].each do |attrs|
+  DeliveryMethod.find_or_create_by!(name: attrs[:name]) { |d| d.assign_attributes(attrs) }
 end
-if Rails.env.development?
-  User.find_or_create_by!(email_address: "admin@example.com") do |u|
-    u.password = "admin12345"
-    u.password_confirmation = "admin12345"
-    u.admin = true
+
+# Адміністратор: дані зі змінних середовища, у репозиторій не потрапляють
+if ENV["ADMIN_EMAIL"].present? && ENV["ADMIN_PASSWORD"].present?
+  User.find_or_create_by!(email_address: ENV["ADMIN_EMAIL"]) do |user|
+    user.password = ENV["ADMIN_PASSWORD"]
+    user.admin = true
+  end
+end
+
+# Демо-каталог з db/seed_data (створюється командою rails seed:export)
+catalog_file = Rails.root.join("db", "seed_data", "products.yml")
+
+if catalog_file.exist?
+  YAML.safe_load_file(catalog_file).each do |attrs|
+    next if Product.exists?(name: attrs["name"])
+
+    product = Product.new(
+      category: Category.find_or_create_by!(name: attrs["category"]),
+      name: attrs["name"],
+      description: attrs["description"],
+      price: attrs["price"],
+      stock: attrs["stock"]
+    )
+
+    if attrs["image"]
+      image_path = Rails.root.join("db", "seed_data", "images", attrs["image"])
+      if image_path.exist?
+        product.image.attach(io: StringIO.new(File.binread(image_path)), filename: attrs["image"])
+      end
+    end
+
+    product.save!
   end
 end

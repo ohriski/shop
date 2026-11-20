@@ -58,7 +58,10 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+  # Безкоштовний Render блокує SMTP: листи не відправляємо.
+  # Повідомлення зі зворотного зв'язку зберігаються й видні в адмін-розділі.
+  config.action_mailer.perform_deliveries = false
+  config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST", "localhost"), protocol: "https" }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   # config.action_mailer.smtp_settings = {
