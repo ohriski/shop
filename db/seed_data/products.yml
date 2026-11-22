@@ -10,12 +10,13 @@
   description: Бездротова легка миша вагою 62 г, до 70 годин роботи від одного заряду.
   price: '1899.0'
   stock: 5
-  image: 4.jfif
+  image: 4.png
 - category: Клавіатури
   name: MechaBlade K87
   description: Механічна клавіатура TKL з перемикачами, що замінюються, та RGB-підсвіткою.
   price: '2499.0'
   stock: 12
+  image: 5.png
 - category: Навушники та гарнітури
   name: SoundRift 7.1
   description: Ігрова гарнітура з віртуальним об'ємним звуком 7.1 та знімним мікрофоном.
@@ -36,4 +37,5 @@
   name: GlideMat XL
   description: Великий килимок 900x400 мм з прошитими краями та гумовою основою.
   price: '499.0'
-  stock: 39
+  stock: 37
+  image: 9.png
