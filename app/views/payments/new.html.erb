@@ -7,12 +7,6 @@
     <div class="card card-body shadow-sm">
       <p class="mb-1">До сплати:</p>
       <p class="display-6 fw-bold"><%= money(@order.total_price) %></p>
-
-      <div class="alert alert-warning small">
-        Це навчальний проєкт: реальний платіж не виконується, гроші не списуються.
-        Дані картки вводити не потрібно.
-      </div>
-
       <%= button_to "Оплатити (тестовий режим)", order_payment_path(@order), class: "btn btn-success w-100" %>
       <%= link_to "Сплатити пізніше", @order, class: "btn btn-link mt-2" %>
     </div>
